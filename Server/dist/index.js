@@ -6,6 +6,8 @@ var _dotenv = _interopRequireDefault(require("dotenv"));
 
 var _connection = _interopRequireDefault(require("./database/connection"));
 
+var _auth = _interopRequireDefault(require("./api/auth"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // Database connection
@@ -17,7 +19,9 @@ zomato.get("/", (req, res) => {
   res.json({
     message: "Server is running"
   });
-});
+}); // /auth/signup
+
+zomato.use("/auth", _auth.default);
 const PORT = 4000;
 zomato.listen(PORT, () => {
   (0, _connection.default)().then(() => {
