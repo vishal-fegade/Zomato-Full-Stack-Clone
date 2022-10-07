@@ -17,7 +17,8 @@ const UserSchema = new mongoose.Schema(
 
 // attachments
 UserSchema.methods.generateJwtToken = function () {
-  return jwt.sign({ user: this._id.toString() }, "ZomatoApp"); // zomatoApp is secret key for token
+ 
+  return jwt.sign({ user: this._id.toString() }, process.env.JWTSECRET);
 };
 
 // helper functions
@@ -34,9 +35,11 @@ UserSchema.statics.findByEmailAndPhone = async ({ email, phoneNumber }) => {
 
 UserSchema.statics.findByEmailAndPassword = async ({ email, password }) => {
   const user = await UserModel.findOne({ email });
+
   if (!user) throw new Error("User does not exist !!!");
 
   // Compare Password
+
   const doesPasswordMatch = await bcrypt.compare(password, user.password);
 
   if (!doesPasswordMatch) throw new Error("Invalid Credentials !!!");
